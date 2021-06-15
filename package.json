@@ -1,0 +1,24 @@
+{
+  "name": "wechat-public-account",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "nodemon src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yayxs/wechat-public-account.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yayxs/wechat-public-account/issues"
+  },
+  "homepage": "https://github.com/yayxs/wechat-public-account#readme",
+  "dependencies": {
+    "@koa/router": "^10.0.0",
+    "koa": "^2.13.1",
+    "sha1": "^1.1.1"
+  }
+}
