@@ -6,7 +6,9 @@ const sha1 = require('sha1') // 加密模块
 const Router = require('@koa/router')
 
 const config = require('./config')
-const {_genAccessTokenApi} = require('./api')
+const {_genAccessTokenApi,_genGetMenuApi} = require('./api')
+const {XML2JSON,json2XML,text} = require('./utils/xmlParse')
+
 const app = new Koa()
 const router = new Router()
 
@@ -67,8 +69,45 @@ router.get('/wx', async (ctx, next) => {
   await next()
 })
 
-app.use(router.routes()).use(router.allowedMethods())
+/**
+ * @description 测试微信服务器交互
+ */
 
+router.post('/',async(ctx,next)=>{
+  const p = new Promise((resolve,reject)=>{
+    let buf = ''
+    ctx.req.setEncoding('utf8')
+    ctx.req.on('data', (chunk) => {
+        buf += chunk
+    })
+    ctx.req.on('end', () => {
+      XML2JSON(buf)
+        .then(resolve)
+        .catch(reject)
+    })
+  })
+  await p.then((res = {})=>{
+    try { 
+      console.log(res)
+    } catch (error) {
+      
+    }
+  }).catch(err=>{
+    
+  })
+  await next()
+})
+
+
+/**
+ * @description 获取自定义菜单配置
+ * @docs https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Getting_Custom_Menu_Configurations.html
+ */
+router.get('/getMenu',async(ctx,next)=>{
+   const res = await  request.get(_genGetMenuApi('46_pQKcVbzOfB5mvuta8b0WWWnfjt6ic_mvpg0u58FkyLbTE4p_aQUZhGRIgGlNDixP_Szg1i-gDlYnlvfuLk-HcFFl2I1nelO9JHxnOEKJg275qEbXAEw8X9tIzVOMn1EGShXUR4rnQeoGfwkhSNUeAFAEZG'))
+   console.log(res)
+})
+app.use(router.routes()).use(router.allowedMethods())
 app.listen(80, () => {
   console.log(`http://127.0.0.1:80`)
 })
