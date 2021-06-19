@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "nodemon src/main.js"
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,14 @@
   "homepage": "https://github.com/yayxs/wechat-public-account#readme",
   "dependencies": {
     "@koa/router": "^10.0.0",
+    "axios": "^0.21.1",
+    "co-wechat": "^2.4.0",
+    "co-wechat-api": "^3.11.0",
+    "co-wechat-oauth": "^2.0.1",
     "koa": "^2.13.1",
-    "request": "^2.88.2",
+    "koa-bodyparser": "^4.3.0",
+    "koa-static": "^5.0.0",
+    "koa-xml-body": "^2.2.0",
     "sha1": "^1.1.1",
     "xml2js": "^0.4.23"
   },

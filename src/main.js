@@ -1,4 +1,3 @@
-const request = require('request')
 const fs = require('fs')
 const Koa = require('koa')
 const sha1 = require('sha1') // 加密模块
@@ -6,44 +5,15 @@ const sha1 = require('sha1') // 加密模块
 const Router = require('@koa/router')
 
 const config = require('./config')
-const {_genAccessTokenApi,_genGetMenuApi} = require('./api')
-const {XML2JSON,json2XML,text} = require('./utils/xmlParse')
+const { _genAccessTokenApi, _genGetMenuApi } = require('./api')
+const { XML2JSON, json2XML, text } = require('./utils/xmlParse')
 
 const app = new Koa()
 const router = new Router()
 
-router.get('/getAccessToken',async(ctx,next)=>{
-  // 获取本地的信息
-  const tokenInfo = fs.existsSync('token_info.json') ? JSON.parse(fs.readFileSync('token_info.json','utf-8')):null
-  let expires_time  = tokenInfo ? tokenInfo.expires_time  : ''
-  let cache_access_token = tokenInfo && tokenInfo.access_token ? tokenInfo.access_token :''
-  if( parseInt(Date.now() / 1000) > expires_time + 3600 ||
-  tokenInfo == null ||
-  cache_access_token == ''){
-    let tokenNew = await new Promise((resolve,reject)=>{
-      request.get(_genAccessTokenApi({appid:config.wechat.appID,secret:config.wechat.AppSecret }),(err,res,body)=>{
-        if(!err && res.statusCode===200){
-          resolve(body)
-        }else{
-          reject(err)
-        }
-      })
-    })
-    tokenNew = JSON.parse(tokenNew)
-    cache_access_token = tokenNew.access_token
-    expires_time = parseInt(Date.now() /1000)
-    fs.writeFileSync('token_info.json',JSON.stringify({
-      access_token:cache_access_token,
-      expires_time:expires_time
-    }))
-    ctx.body = { access_token:cache_access_token,expires_time:expires_time }
-  }else{
-    ctx.body = tokenNew
-  }
-  await next()
-})
-
-
+/**
+ * @description 微信验证
+ */
 router.get('/wx', async (ctx, next) => {
   /**
    * @description 验证消息来自微信服务器 开发者提交信息后，微信服务器将发送GET请求到填写的服务器地址URL上，GET请求携带参数如下
@@ -56,56 +26,71 @@ router.get('/wx', async (ctx, next) => {
   const str = [token, timestamp, nonce].sort().join('')
 
   const res = sha1(str)
-  let rt
   if (res === signature) {
-    rt = ctx.query.echostr
+    ctx.body = echostr
   } else {
-    rt = {
-      code: -1,
-      msg: 'fail',
-    }
+    ctx.body = `not wechat`
   }
   ctx.body = rt
   await next()
 })
 
-/**
- * @description 测试微信服务器交互
- */
-
-router.post('/',async(ctx,next)=>{
-  const p = new Promise((resolve,reject)=>{
-    let buf = ''
-    ctx.req.setEncoding('utf8')
-    ctx.req.on('data', (chunk) => {
-        buf += chunk
+router.get('/getAccessToken', async (ctx, next) => {
+  // 获取本地的信息
+  const tokenInfo = fs.existsSync('token_info.json')
+    ? JSON.parse(fs.readFileSync('token_info.json', 'utf-8'))
+    : null
+  let expires_time = tokenInfo ? tokenInfo.expires_time : ''
+  let cache_access_token =
+    tokenInfo && tokenInfo.access_token ? tokenInfo.access_token : ''
+  if (
+    parseInt(Date.now() / 1000) > expires_time + 3600 ||
+    tokenInfo == null ||
+    cache_access_token == ''
+  ) {
+    let tokenNew = await new Promise((resolve, reject) => {
+      request.get(
+        _genAccessTokenApi({
+          appid: config.wechat.appID,
+          secret: config.wechat.AppSecret,
+        }),
+        (err, res, body) => {
+          if (!err && res.statusCode === 200) {
+            resolve(body)
+          } else {
+            reject(err)
+          }
+        }
+      )
     })
-    ctx.req.on('end', () => {
-      XML2JSON(buf)
-        .then(resolve)
-        .catch(reject)
-    })
-  })
-  await p.then((res = {})=>{
-    try { 
-      console.log(res)
-    } catch (error) {
-      
-    }
-  }).catch(err=>{
-    
-  })
+    tokenNew = JSON.parse(tokenNew)
+    cache_access_token = tokenNew.access_token
+    expires_time = parseInt(Date.now() / 1000)
+    fs.writeFileSync(
+      'token_info.json',
+      JSON.stringify({
+        access_token: cache_access_token,
+        expires_time: expires_time,
+      })
+    )
+    ctx.body = { access_token: cache_access_token, expires_time: expires_time }
+  } else {
+    ctx.body = tokenNew
+  }
   await next()
 })
-
 
 /**
  * @description 获取自定义菜单配置
  * @docs https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Getting_Custom_Menu_Configurations.html
  */
-router.get('/getMenu',async(ctx,next)=>{
-   const res = await  request.get(_genGetMenuApi('46_pQKcVbzOfB5mvuta8b0WWWnfjt6ic_mvpg0u58FkyLbTE4p_aQUZhGRIgGlNDixP_Szg1i-gDlYnlvfuLk-HcFFl2I1nelO9JHxnOEKJg275qEbXAEw8X9tIzVOMn1EGShXUR4rnQeoGfwkhSNUeAFAEZG'))
-   console.log(res)
+router.get('/getMenu', async (ctx, next) => {
+  const res = await request.get(
+    _genGetMenuApi(
+      '46_pQKcVbzOfB5mvuta8b0WWWnfjt6ic_mvpg0u58FkyLbTE4p_aQUZhGRIgGlNDixP_Szg1i-gDlYnlvfuLk-HcFFl2I1nelO9JHxnOEKJg275qEbXAEw8X9tIzVOMn1EGShXUR4rnQeoGfwkhSNUeAFAEZG'
+    )
+  )
+  console.log(res)
 })
 app.use(router.routes()).use(router.allowedMethods())
 app.listen(80, () => {
