@@ -10,4 +10,8 @@ module.exports = {
     URL: `http://vast.free.idcfengye.com/wx`,
     Token: `test`,
   },
+  scopes: {
+    snsapi_base: `snsapi_base`,
+    snsapi_userinfo: `snsapi_userinfo`,
+  },
 }

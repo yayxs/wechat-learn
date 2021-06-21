@@ -5,7 +5,7 @@ const sha1 = require('sha1') // 加密模块
 const Router = require('@koa/router')
 
 const config = require('./config')
-const { _genAccessTokenApi, _genGetMenuApi } = require('./api')
+const { genAccessTokenApi, genGetMenuApi } = require('./api')
 const { XML2JSON, json2XML, text } = require('./utils/xmlParse')
 
 const app = new Koa()
@@ -50,7 +50,7 @@ router.get('/getAccessToken', async (ctx, next) => {
   ) {
     let tokenNew = await new Promise((resolve, reject) => {
       request.get(
-        _genAccessTokenApi({
+        genAccessTokenApi({
           appid: config.wechat.appID,
           secret: config.wechat.AppSecret,
         }),
@@ -86,7 +86,7 @@ router.get('/getAccessToken', async (ctx, next) => {
  */
 router.get('/getMenu', async (ctx, next) => {
   const res = await request.get(
-    _genGetMenuApi(
+    genGetMenuApi(
       '46_pQKcVbzOfB5mvuta8b0WWWnfjt6ic_mvpg0u58FkyLbTE4p_aQUZhGRIgGlNDixP_Szg1i-gDlYnlvfuLk-HcFFl2I1nelO9JHxnOEKJg275qEbXAEw8X9tIzVOMn1EGShXUR4rnQeoGfwkhSNUeAFAEZG'
     )
   )
