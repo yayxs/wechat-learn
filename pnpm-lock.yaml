@@ -12,6 +12,7 @@ specifiers:
   koa-static: ^5.0.0
   koa-xml-body: ^2.2.0
   sha1: ^1.1.1
+  urlencode: ^1.1.0
   xml2js: ^0.4.23
 
 dependencies:
@@ -25,6 +26,7 @@ dependencies:
   koa-static: registry.nlark.com/koa-static/5.0.0
   koa-xml-body: registry.nlark.com/koa-xml-body/2.2.0
   sha1: registry.nlark.com/sha1/1.1.1
+  urlencode: registry.nlark.com/urlencode/1.1.0
   xml2js: registry.nlark.com/xml2js/0.4.23
 
 devDependencies:
@@ -64,7 +66,7 @@ packages:
     dev: false
 
   /axios/0.21.1:
-    resolution: {integrity: sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=, tarball: https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz?cache=0&sync_timestamp=1608634195859&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.21.1.tgz}
+    resolution: {integrity: sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=, tarball: axios/download/axios-0.21.1.tgz?cache=0&sync_timestamp=1608634195859&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.21.1.tgz}
     dependencies:
       follow-redirects: registry.nlark.com/follow-redirects/1.14.1
     dev: false
@@ -183,7 +185,7 @@ packages:
     dev: true
 
   /cz-conventional-changelog/3.3.0:
-    resolution: {integrity: sha1-kkaUfJBAQUmz/iz37pGsrTt9ItI=, tarball: https://registry.npm.taobao.org/cz-conventional-changelog/download/cz-conventional-changelog-3.3.0.tgz}
+    resolution: {integrity: sha1-kkaUfJBAQUmz/iz37pGsrTt9ItI=, tarball: cz-conventional-changelog/download/cz-conventional-changelog-3.3.0.tgz}
     engines: {node: '>= 10'}
     dependencies:
       chalk: registry.nlark.com/chalk/2.4.2
@@ -585,9 +587,6 @@ packages:
   /safe-buffer/5.1.2:
     resolution: {integrity: sha1-mR7GnSluAxN0fVm9/St0XDX4go0=, tarball: safe-buffer/download/safe-buffer-5.1.2.tgz}
     dev: false
-
-  /safer-buffer/2.1.2:
-    resolution: {integrity: sha1-RPoWGwGHuVSd2Eu5GAL5vYOFzWo=, tarball: https://registry.npm.taobao.org/safer-buffer/download/safer-buffer-2.1.2.tgz}
 
   /sax/0.6.1:
     resolution: {integrity: sha1-VjsZx8HeiS4Jv8Ty/DDjwn8JUrk=, tarball: https://registry.npm.taobao.org/sax/download/sax-0.6.1.tgz}
@@ -1192,12 +1191,12 @@ packages:
     dev: false
 
   registry.nlark.com/iconv-lite/0.4.24:
-    resolution: {integrity: sha1-ICK0sl+93CHS9SSXSkdKr+czkIs=, registry: http://registry.npm.taobao.org/, tarball: https://registry.nlark.com/iconv-lite/download/iconv-lite-0.4.24.tgz}
+    resolution: {integrity: sha1-ICK0sl+93CHS9SSXSkdKr+czkIs=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/iconv-lite/download/iconv-lite-0.4.24.tgz}
     name: iconv-lite
     version: 0.4.24
     engines: {node: '>=0.10.0'}
     dependencies:
-      safer-buffer: 2.1.2
+      safer-buffer: registry.nlark.com/safer-buffer/2.1.2
 
   registry.nlark.com/inflation/2.0.0:
     resolution: {integrity: sha1-i0F+R8KPklpFEz2RTKH9OJEH8w8=, registry: http://registry.npm.taobao.org/, tarball: https://registry.nlark.com/inflation/download/inflation-2.0.0.tgz}
@@ -1523,6 +1522,11 @@ packages:
       tslib: registry.nlark.com/tslib/1.14.1
     dev: true
 
+  registry.nlark.com/safer-buffer/2.1.2:
+    resolution: {integrity: sha1-RPoWGwGHuVSd2Eu5GAL5vYOFzWo=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/safer-buffer/download/safer-buffer-2.1.2.tgz}
+    name: safer-buffer
+    version: 2.1.2
+
   registry.nlark.com/sha1/1.1.1:
     resolution: {integrity: sha1-rdqnqTFo85PxnrKxUJFhjicA+Eg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/sha1/download/sha1-1.1.1.tgz}
     name: sha1
@@ -1566,6 +1570,14 @@ packages:
     name: tsscmp
     version: 1.0.6
     engines: {node: '>=0.6.x'}
+    dev: false
+
+  registry.nlark.com/urlencode/1.1.0:
+    resolution: {integrity: sha1-HyuibwE8hfATP3o61v8nMK33y7c=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/urlencode/download/urlencode-1.1.0.tgz}
+    name: urlencode
+    version: 1.1.0
+    dependencies:
+      iconv-lite: registry.nlark.com/iconv-lite/0.4.24
     dev: false
 
   registry.nlark.com/wechat-crypto/0.0.2:

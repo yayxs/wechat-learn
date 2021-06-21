@@ -4,8 +4,8 @@ const sha1 = require('sha1') // 加密模块
 
 const Router = require('@koa/router')
 
-const config = require('./config')
-const { genAccessTokenApi, genGetMenuApi } = require('./api')
+const config = require('../config')
+const { genAccessTokenApi, genGetMenuApi } = require('../api')
 const { XML2JSON, json2XML, text } = require('./utils/xmlParse')
 
 const app = new Koa()

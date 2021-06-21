@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vant@next/lib/index.css"
+    />
+    <style>
+      ::-webkit-scrollbar {
+        background-color: lightgray;
+        width: 4px;
+        height: 4px;
+        background-clip: padding-box;
+      }
+
+      ::-webkit-scrollbar-button {
+        background-color: #fff;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        position: relative;
+        display: block;
+        width: 0;
+        height: 0;
+        cursor: pointer;
+        border-radius: inherit;
+        background-color: rgba(144, 147, 153, 0.3);
+        transition: background-color 0.3s;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #app {
+        width: 100vw;
+      }
+      #app button {
+        margin-bottom: 1rem;
+      }
+      h4 {
+        color: #ccc;
+        text-align: center;
+        margin: 0.6rem 0rem;
+      }
+      .box {
+        padding: 0rem 1rem;
+      }
+      .box div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="tmp">
+      <div class="box">
+        <div>
+          <h4>开始开发</h4>
+          <div>
+            <van-button type="primary" size="small" @click="handleWx">
+              验证消息的确来自微信服务器</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="getAccessToken">
+              获取Access token</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="getWxIps">
+              获取微信服务器IP地址</van-button
+            >
+          </div>
+        </div>
+        <div>
+          <h4>自定义菜单</h4>
+          <div>
+            <van-button type="primary" size="small" @click="createMenu">
+              创建菜单</van-button
+            >
+          </div>
+        </div>
+        <div>
+          <h4>基础消息能力</h4>
+          <div>
+            <van-button type="primary" size="small" @click="getTempList">
+              获取模板列表</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="sendMsgTemp">
+              发送模板消息</van-button
+            >
+          </div>
+        </div>
+        <div>
+          <h4>微信网页开发</h4>
+          <div>
+            <van-button type="primary" size="small" @click="handleWxAuthorize1">
+              微信网页授权</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="handleGetUserInfo1">
+              获取用户信息-base</van-button
+            >
+          </div>
+        </div>
+        <div>
+          <h4>第三方库的使用</h4>
+          <div>
+            <van-button type="primary" size="small" @click="handleWxAuthorize">
+              auth</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="handleGetUserInfo">
+              获取用户信息</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="getJsConfig">
+              获取微信JS SDK Config的所需参数</van-button
+            >
+          </div>
+        </div>
+      </div>
+    </template>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@next/lib/vant.min.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const app = Vue.createApp({
+        template: '#tmp',
+
+        setup(props) {
+          const getAccessToken = async () => {
+            console.log(`---获取Access token---`)
+            try {
+              const res = await axios.get('/getAccessToken')
+              console.log(res)
+            } catch (error) {}
+          }
+          const getWxIps = async () => {
+            try {
+              const res = await axios(`/getWxIps`)
+              console.log(res)
+            } catch (error) {}
+          }
+          const handleWx = async () => {
+            try {
+              const res = await axios(`/wx`)
+              console.log(res)
+            } catch (error) {}
+          }
+
+          const sendMsgTemp = async () => {
+            await axios(`/sendMsgTemp`)
+          }
+          const getTempList = async () => {
+            const res = await axios(`/getTempList`)
+            console.log(res)
+          }
+
+          const createMenu = async () => {
+            await axios(`/createMenu`)
+          }
+          const getCode = async () => {}
+          const handleWxAuthorize = () => {
+            window.location.href = `/wxAuthorize`
+          }
+
+          const handleWxAuthorize1 = async () => {
+            window.location.href = `/wxAuthorize1`
+          }
+          const handleGetUserInfo1 = async () => {
+            let url = new URL(window.location.href)
+            console.log(url.searchParams.get('openid'))
+            const res = await axios(`/getUser1`, {
+              params: {
+                openid: url.searchParams.get('openid'),
+                access_token: url.searchParams.get('access_token'),
+              },
+            })
+            console.log(res)
+          }
+          const handleGetUserInfo = async () => {
+            const res = await axios(`/getUser`, {
+              params: {},
+            })
+          }
+          const getJsConfig = async () => {
+            console.log(`==JSSDK`)
+            const params = {
+              debug: true,
+              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'],
+              url: window.location.href,
+            }
+            const res = await axios(`/getJsConfig`, {
+              params,
+            })
+            console.log('res', res)
+            const wxConfig = {
+              debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: res.data.appId, // 必填，公众号的唯一标识
+              timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+              nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+              signature: res.data.signature, // 必填，签名
+              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'], // 必填，需要使用的JS接口列表
+            }
+
+            wx.config(wxConfig)
+            wx.ready(function () {
+              // config信息验证后会执行ready方法，
+              // 所有接口调用都必须在config接口获得结果之后
+              //config是一个客户端的异步操作，
+              // 所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。
+              // 对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+              console.log(`wx.ready`)
+            })
+
+            wx.getNetworkType({
+              success: function (res) {
+                const networkType = res.networkType // 返回网络类型2g，3g，4g，wifi
+                console.log(networkType)
+              },
+            })
+          }
+          return {
+            getAccessToken,
+            getWxIps,
+            createMenu,
+            handleWx,
+            sendMsgTemp,
+            getTempList,
+            handleWxAuthorize,
+            handleWxAuthorize1,
+            handleGetUserInfo,
+            handleGetUserInfo1,
+            getJsConfig,
+            getCode,
+          }
+        },
+      })
+      app.use(vant)
+      app.use(vant.Lazyload)
+      app.mount('#app')
+    </script>
+  </body>
+</html>
