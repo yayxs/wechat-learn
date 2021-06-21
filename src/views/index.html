@@ -111,6 +111,16 @@
               获取用户信息-base</van-button
             >
           </div>
+          <div>
+            <van-button type="primary" size="small" @click="handleJSSDK">
+              JS-SDK</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="scanQRCode">
+              微信扫一扫</van-button
+            >
+          </div>
         </div>
         <div>
           <h4>第三方库的使用</h4>
@@ -192,9 +202,22 @@
             })
             console.log(res)
           }
+          const handleJSSDK = () => {
+            console.log(`123`)
+          }
           const handleGetUserInfo = async () => {
             const res = await axios(`/getUser`, {
               params: {},
+            })
+          }
+          const scanQRCode = () => {
+            wx.scanQRCode({
+              needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+              scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+              success: function (res) {
+                const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+                console.log(result)
+              },
             })
           }
           const getJsConfig = async () => {
@@ -247,6 +270,8 @@
             handleGetUserInfo1,
             getJsConfig,
             getCode,
+            handleJSSDK,
+            scanQRCode,
           }
         },
       })

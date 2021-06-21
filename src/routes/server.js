@@ -170,8 +170,18 @@ router.get(`/createMenu`, async (ctx, next) => {
     button: [
       {
         type: 'click',
-        name: '今日歌曲',
+        name: '一级菜单1',
         key: 'V1001_TODAY_MUSIC',
+      },
+      {
+        name: '菜单',
+        sub_button: [
+          {
+            type: 'view',
+            name: '首页',
+            url: 'http://vast.free.idcfengye.com/',
+          },
+        ],
       },
     ],
   }
