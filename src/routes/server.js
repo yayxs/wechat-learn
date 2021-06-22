@@ -30,7 +30,7 @@ router.get(`/getAccessToken`, async (ctx, next) => {
     })
   )
   console.log(res.data)
-  fs.writeFileSync('./token.txt', res.data.access_token, 'utf-8')
+  fs.writeFileSync('./token.txt', res.data.access_token, 'utf8')
   ctx.body = res.data
 })
 
@@ -38,7 +38,7 @@ router.get(`/getAccessToken`, async (ctx, next) => {
  * @docs https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_the_WeChat_server_IP_address.html
  */
 router.get(`/getWxIps`, async (ctx, next) => {
-  let token = fs.readFileSync('./token.txt', 'utf-8')
+  let token = fs.readFileSync('./token.txt', 'utf8')
   console.log(token)
   const URL = `https://api.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=${token}`
   console.log(URL)
@@ -101,7 +101,7 @@ router.post('/wx', async (ctx, next) => {
 })
 
 router.get(`/getTempList`, async (ctx, next) => {
-  let token = fs.readFileSync('./token.txt', 'utf-8')
+  let token = fs.readFileSync('./token.txt', 'utf8')
   let url = `https://api.weixin.qq.com/cgi-bin/template/get_all_private_template?access_token=${token}`
   const res = await axios(url)
   // console.log(res)
@@ -112,7 +112,7 @@ router.get(`/getTempList`, async (ctx, next) => {
  * @description 发送模板消息
  */
 router.get(`/sendMsgTemp`, async (ctx, next) => {
-  let token = fs.readFileSync('./token.txt', 'utf-8')
+  let token = fs.readFileSync('./token.txt', 'utf8')
   let url = `https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=${token}`
   const tempIdRes = await axios({
     method: 'post',
@@ -164,7 +164,7 @@ router.get(`/sendMsgTemp`, async (ctx, next) => {
  */
 
 router.get(`/createMenu`, async (ctx, next) => {
-  let token = fs.readFileSync('./token.txt', 'utf-8')
+  let token = fs.readFileSync('./token.txt', 'utf8')
   let url = ` https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${token}`
   const data = {
     button: [

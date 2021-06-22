@@ -112,8 +112,18 @@
             >
           </div>
           <div>
-            <van-button type="primary" size="small" @click="handleJSSDK">
-              JS-SDK</van-button
+            <van-button type="primary" size="small" @click="getJsapiTicket">
+              获取jsapi_ticket临时票据</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="genJSSDK">
+              generate JS-SDK signature</van-button
+            >
+          </div>
+          <div>
+            <van-button type="primary" size="small" @click="configJSSDK">
+              JS-SDK权限验证配置</van-button
             >
           </div>
           <div>
@@ -202,15 +212,95 @@
             })
             console.log(res)
           }
-          const handleJSSDK = () => {
-            console.log(`123`)
+          const genJSSDK = async () => {
+            console.log(window.location.href.split('#')[0])
+            const nowUrl = window.location.href.split('#')[0]
+            const res = await axios(`/jssdk`, {
+              params: {
+                url: nowUrl,
+              },
+            })
+            console.log(res.data)
+            // await axios({
+            //   method: 'post',
+            //   url: `/jssdk`,
+            //   data: {
+            //     url: window.location.href.split('#')[0],
+            //   },
+            // })
+          }
+          const wxConfig = (data) => {
+            let jsApiList = [
+              'updateAppMessageShareData',
+              'updateTimelineShareData',
+              'onMenuShareTimeline',
+              'onMenuShareAppMessage',
+              'onMenuShareQQ',
+              'onMenuShareWeibo',
+              'onMenuShareQZone',
+              'startRecord',
+              'stopRecord',
+              'onVoiceRecordEnd',
+              'playVoice',
+              'pauseVoice',
+              'stopVoice',
+              'onVoicePlayEnd',
+              'uploadVoice',
+              'downloadVoice',
+              'chooseImage',
+              'previewImage',
+              'uploadImage',
+              'downloadImage',
+              'translateVoice',
+              'getNetworkType',
+              'openLocation',
+              'getLocation',
+              'hideOptionMenu',
+              'showOptionMenu',
+              'hideMenuItems',
+              'showMenuItems',
+              'hideAllNonBaseMenuItem',
+              'showAllNonBaseMenuItem',
+              'closeWindow',
+              'scanQRCode',
+              'chooseWXPay',
+              'openProductSpecificView',
+              'addCard',
+              'chooseCard',
+              'openCard',
+            ]
+
+            return new Promise((resolve, reject) => {
+              wx.config({
+                ...data,
+                jsApiList,
+              })
+              wx.error((err) => {
+                reject(err)
+              })
+              wx.ready(() => {
+                resolve()
+              })
+            })
+          }
+          const configJSSDK = async () => {
+            const config = {
+              debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: 'wx96e239a9e4bbbdcc', // 必填，公众号的唯一标识
+              timestamp: 1624332586559, // 必填，生成签名的时间戳
+              nonceStr: 'lqkpvbyvfnrcge4s', // 必填，生成签名的随机串
+              signature: '862a3de6aa5c5eb62f12e263044fe2ad7732f947', // 必填，签名
+            }
+            const res = await wxConfig(config)
+            console.log('res--', res)
           }
           const handleGetUserInfo = async () => {
             const res = await axios(`/getUser`, {
               params: {},
             })
           }
-          const scanQRCode = () => {
+          const scanQRCode = async () => {
+            await configJSSDK()
             wx.scanQRCode({
               needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
               scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
@@ -219,6 +309,9 @@
                 console.log(result)
               },
             })
+          }
+          const getJsapiTicket = async () => {
+            await axios(`/getJsapiTicket`)
           }
           const getJsConfig = async () => {
             console.log(`==JSSDK`)
@@ -270,8 +363,10 @@
             handleGetUserInfo1,
             getJsConfig,
             getCode,
-            handleJSSDK,
+            genJSSDK,
             scanQRCode,
+            getJsapiTicket,
+            configJSSDK,
           }
         },
       })

@@ -2,8 +2,8 @@
 const fs = require('fs')
 const urlencode = require('urlencode')
 const Router = require('@koa/router')
-const xml2js = require('xml2js')
 const axios = require('axios')
+const { genNoncestr, mySha1 } = require('../utils/index')
 
 const { handleWxCallback } = require('../controllers/web')
 const {
@@ -35,5 +35,46 @@ router.get(`/getUser1`, async (ctx, next) => {
   const res = await axios(url)
   ctx.body = res.data
 })
+/**
+ * @description 获取jsapi_ticket
+ * @docs  https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#62
+ */
 
+router.get(`/getJsapiTicket`, async (ctx, next) => {
+  const token = fs.readFileSync('./token.txt', 'utf8')
+  const URL = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${token}&type=jsapi`
+  const res = await axios(URL)
+  console.log(res.data)
+  try {
+    fs.writeFileSync('./ticket.txt', res.data.ticket, 'utf8')
+  } catch (error) {}
+  ctx.body = res.data
+})
+
+/**
+ * @description 获取jssdk 获得jsapi_ticket之后，就可以生成JS-SDK权限验证的签名
+ * 传入生成签名的地址 window.location.href.split('#')[0]
+ * @docs https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#62
+ */
+
+router.get(`/jssdk`, async (ctx, next) => {
+  const { url } = ctx.query
+  const jsapi_ticket = fs.readFileSync('./ticket.txt', 'utf8')
+  const noncestr = genNoncestr(16)
+  const timestamp = +new Date()
+
+  const data = {
+    jsapi_ticket,
+    noncestr,
+    timestamp,
+    url,
+  }
+  let signature = Object.keys(data)
+    .sort()
+    .map((item) => `${item}=${data[item]}`)
+    .join('&')
+  signature = mySha1(signature)
+  console.log(data)
+  ctx.body = { noncestr: noncestr, timestamp, signature }
+})
 module.exports = router
