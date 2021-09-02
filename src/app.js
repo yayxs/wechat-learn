@@ -18,5 +18,5 @@ app.use(serverRouter.routes()).use(serverRouter.allowedMethods())
 app.use(webRouter.routes()).use(webRouter.allowedMethods())
 
 app.listen(80, () => {
-  console.log(`http://127.0.0.1:80`)
+  console.log(`http://127.0.0.1:8080`)
 })
