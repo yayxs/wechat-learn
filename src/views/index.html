@@ -4,11 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vant@next/lib/index.css"
-    />
+    <title>微信公众号开发</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@next/lib/index.css" />
     <style>
       ::-webkit-scrollbar {
         background-color: lightgray;
@@ -63,91 +60,67 @@
         <div>
           <h4>开始开发</h4>
           <div>
-            <van-button type="primary" size="small" @click="handleWx">
-              验证消息的确来自微信服务器</van-button
-            >
+            <van-button type="primary" size="small" @click="handleWx"> 验证消息的确来自微信服务器</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="getAccessToken">
-              获取Access token</van-button
-            >
+            <van-button type="primary" size="small" @click="getAccessToken"> 获取Access token</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="getWxIps">
-              获取微信服务器IP地址</van-button
-            >
+            <van-button type="primary" size="small" @click="getWxIps"> 获取微信服务器IP地址</van-button>
           </div>
         </div>
         <div>
           <h4>自定义菜单</h4>
           <div>
-            <van-button type="primary" size="small" @click="createMenu">
-              创建菜单</van-button
-            >
+            <van-button type="primary" size="small" @click="createMenu"> 创建菜单</van-button>
           </div>
         </div>
         <div>
           <h4>基础消息能力</h4>
           <div>
-            <van-button type="primary" size="small" @click="getTempList">
-              获取模板列表</van-button
-            >
+            <van-button type="primary" size="small" @click="getTempList"> 获取模板列表</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="sendMsgTemp">
-              发送模板消息</van-button
-            >
+            <van-button type="primary" size="small" @click="sendMsgTemp"> 发送模板消息</van-button>
           </div>
         </div>
         <div>
           <h4>微信网页开发</h4>
           <div>
-            <van-button type="primary" size="small" @click="handleWxAuthorize1">
-              微信网页授权</van-button
-            >
+            <van-button type="primary" size="small" @click="handleWxAuthorize1"> 微信网页授权</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="handleGetUserInfo1">
-              获取用户信息-base</van-button
-            >
+            <van-button type="primary" size="small" @click="handleGetUserInfo1"> 获取用户信息-base</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="getJsapiTicket">
-              获取jsapi_ticket临时票据</van-button
-            >
+            <van-button type="primary" size="small" @click="getJsapiTicket"> 获取jsapi_ticket临时票据</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="genJSSDK">
-              generate JS-SDK signature</van-button
-            >
+            <van-button type="primary" size="small" @click="genJSSDK"> generate JS-SDK signature</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="configJSSDK">
-              JS-SDK权限验证配置</van-button
-            >
+            <van-button type="primary" size="small" @click="configJSSDK"> JS-SDK权限验证配置</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="scanQRCode">
-              微信扫一扫</van-button
-            >
+            <van-button type="primary" size="small" @click="scanQRCode"> 微信扫一扫</van-button>
           </div>
         </div>
         <div>
           <h4>第三方库的使用</h4>
           <div>
-            <van-button type="primary" size="small" @click="handleWxAuthorize">
-              auth</van-button
-            >
+            <van-button type="primary" size="small" @click="handleWxAuthorize"> auth</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="handleGetUserInfo">
-              获取用户信息</van-button
-            >
+            <van-button type="primary" size="small" @click="handleGetUserInfo"> 获取用户信息</van-button>
           </div>
           <div>
-            <van-button type="primary" size="small" @click="getJsConfig">
-              获取微信JS SDK Config的所需参数</van-button
-            >
+            <van-button type="primary" size="small" @click="getJsConfig"> 获取微信JS SDK Config的所需参数</van-button>
+          </div>
+        </div>
+        <div>
+          <h4>云开发能力</h4>
+          <div>
+            <van-button type="primary" size="small" @click="checkLogin"> 云开发登录</van-button>
           </div>
         </div>
       </div>
@@ -229,6 +202,7 @@
             //   },
             // })
           }
+
           const wxConfig = (data) => {
             let jsApiList = [
               'updateAppMessageShareData',
@@ -350,6 +324,16 @@
               },
             })
           }
+          // 云开发登录
+          const checkLogin = async () => {
+            console.log(123)
+            // const c = new cloud.Cloud({
+            //   appid: 'wx94f7ded2a2b0a038',
+            //   resourceAppid: 'wx62c2e360c3d3ebd0',
+            //   resourceEnv: 'cloud1-4gkgv212fa641841',
+            // })
+            // await c.init()
+          }
           return {
             getAccessToken,
             getWxIps,
@@ -367,6 +351,7 @@
             scanQRCode,
             getJsapiTicket,
             configJSSDK,
+            checkLogin,
           }
         },
       })
